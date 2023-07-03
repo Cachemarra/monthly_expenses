@@ -1,12 +1,24 @@
 # %% Imports
 import streamlit as st
-from time_functions import get_month_and_year, get_current_month_and_year, get_current_semester
+from time_functions import get_month_and_year, get_current_month_and_year, TimeFunctions
 from logging_config import log
 
+timeFunctions = TimeFunctions()
 
 
 def init_page():
+    st.set_page_config("Monthly expenses",
+                       "🧮",
+                       initial_sidebar_state="expanded",
+                       layout="wide",
+                       )
+
+    st.header(" ")
     initialize_sidebar()
+
+    body()
+
+
     pass
 
 # %% Functions
@@ -18,16 +30,17 @@ def initialize_sidebar():
 
         # Selecting the date
         if radioMonth == "Other":
-            year, month = get_month_and_year()
+            year, month = timeFunctions.get_month_and_year() # get_month_and_year()
 
         else:
-            year, month = get_current_month_and_year()
+            year, month = timeFunctions.get_current_month_and_year() # get_current_month_and_year()
             st.markdown(f"**{year}, {month}**")
 
         log.debug(f"Year: {year}, month: {month}")
 
 
 def body():
+    st.title("Monthly expenses project")
 
 
 
