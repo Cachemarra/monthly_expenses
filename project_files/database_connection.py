@@ -1,11 +1,47 @@
 # %% Management of database resources
 # A CRUD
-import sqlite3
+import sqlite3 as sql3
 from logging_config import log
 
 
 # %% Generating the class
-class SQLConnection:
+class Connection:
+    _DATABASE = "expenses"
+    _USERNAME = "username"
+    _PASSWORD = "root"
+    _DB_PORT = 5432
+    _HOST = 'localhost'
+    _connection = None
+    _cursor = None
+
+    # ====================
+    def get_connection(cls):
+        # If there's no connection, create one.
+        if cls._connection is None:
+            try:
+                cls._connection = sql3.connect(f"{cls._DATABASE}.db")
+                log.debug(f"[SUCCESS] Connected to database {cls._connection}")
+
+                return cls._connection
+
+            except Exception as err:
+                log.error(f"Error connecting to database. Error: {err}")
+
+        else:
+            return cls._connection
+
+    
+
+
+
+
+
+
+
+
+
+
+
     def init(self, name):
         self.connection = sqlite3.connect(f"{name}.db")
         

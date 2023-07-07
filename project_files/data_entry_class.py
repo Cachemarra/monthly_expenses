@@ -1,3 +1,6 @@
+# %% Imports
+
+
 class Entry:
     def __init__(self,
                  dataId: str = None,
@@ -58,7 +61,17 @@ class Entry:
         self._month = value
     
     
+
+class EntryDAO:
+    # Class attributes
+    _SELECT = "SELECT * FROM %s ORDER BY dataId"
+    _INSERT = "INSERT INTO %s (ammount, category, description, month) VALUES(%s, %s, %s, %s)"
+    _UPDATE = "UPDATE %s SET ammount = %s, category = %s, description = %s, month = %s WHERE dataId = %s"
+    _DELETE = "DELETE FROM %s WHERE dataId = %s"
     
-    
-    
+    @classmethod
+    def select(cls) -> Entry:
+        with
+
+
     
