@@ -56,7 +56,7 @@ class TimeFunctions:
     YEARS = tuple([years for years in range(CURRENT_DATE.tm_year - 7, CURRENT_DATE.tm_year)][::-1])
 
     def __init__(self):
-        self.currentMonth = self.MONTHS[self.CURRENT_DATE.tm_mon]
+        self.currentMonth = self.MONTHS[self.CURRENT_DATE.tm_mon - 1]
         self.currentYear = self.CURRENT_DATE.tm_year
 
     def get_current_month_and_year(self) -> tuple:
@@ -76,7 +76,7 @@ class TimeFunctions:
         with column1:
             monthDate = st.selectbox("Month",
                                      self.MONTHS,
-                                     index=self.CURRENT_DATE.tm_mon,
+                                     index=self.CURRENT_DATE.tm_mon - 1,
                                      )
         with column2:
             yearDate = st.selectbox("Year",
