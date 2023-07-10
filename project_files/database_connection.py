@@ -30,47 +30,66 @@ class Connection:
         else:
             return cls._connection
 
-    
+    @classmethod
+    def create_table(cls):
+        conn = cls.get_connection()
+        cursor = conn.cursor()
 
-
-
-
-
-
-
-
-
-
-
-    def init(self, name):
-        self.connection = sqlite3.connect(f"{name}.db")
-        
-        
-    def create_table(self):
-        self.execute(
-            """ CREATE TABLE IF NOT EXISTS
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS expenses (
+            dataID INTEGER PRIMARY KEY,
+            InOut TEXT NOT NULL,
+            Ammount REAL NOT NULL,
+            Category TEXT NOT NULL,
+            Description TEXT,
+            Month TEXT NOT NULL
+            )
             """
         )
+        log.debug("Table was not found, A new one was created.")
 
+    @classmethod
+    def add_expense(cls, ammount: int = 0, category: str = "", description: str = "", month="Decenuary"):
+        """
+        Function to prepare a query to add an expense to the database.
+        """
+        conn = cls.get_connection()
+        cursor = conn.cursor()
 
-    def add_expense(self, ammount:int=0, category:str="", description:str=""):
         try:
-            self.connection(
+            conn.execute(
                 f"""
+                INSERT INTO expenses ( ammount, category, description, month) VALUES({ammount}, {category}, {description}, {month})
                 """
             )
+            conn.commit()
         except Exception as err:
             log.error(f"An error has ocurred: {err}")
-        pass
-    
-    
-    def add_income(self, ammount:int=0, category:str="", description:str=""):
-        try:
 
-        except Exception as err:
-            log.error(f"An error has ocurred: {err}")
-        pass
+    @classmethod
+    def read(cls, table, **kwargs):
+        conn = cls.get_connection()
+        cursor = conn.cursor()
+        fields = ' AND '.join(f"{k} = ?" for k in kwargs)
+        cursor.execute(f'SELECT * FROM {table} WHERE {fields}', tuple(kwargs.values()))
+        return cursor.fetchall()
 
+    @classmethod
+    def update(cls, table, id, **kwargs):
+        conn = cls.get_connection()
+        cursor = conn.cursor()
+        fields = ', '.join(f"{k} = ?" for k in kwargs)
+        cursor.execute(f'UPDATE {table} SET {fields} WHERE id = ?', (*kwargs.values(), id))
+        conn.commit()
+
+    @classmethod
+    def delete(cls, table, **kwargs):
+        conn = cls.get_connection()
+        cursor = conn.cursor()
+        fields = ' AND '.join(f"{k} = ?" for k in kwargs)
+        cursor.execute(f'DELETE FROM {table} WHERE {fields}', tuple(kwargs.values()))
+        conn.commit()
 
 
 
